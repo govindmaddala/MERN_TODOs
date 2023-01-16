@@ -1,0 +1,63 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+#container{
+    width: 100vw;
+    height: 100vh;
+    background-color: antiquewhite;
+    display: flex;
+    flex-direction: row;
+}
+
+#introductionBox{
+    width: 60vw;
+    height: 100vh;
+    border-right: 2px solid black;
+    flex-wrap: wrap;
+}
+
+#loginBox{
+    width: 40vw;
+   display: flex;
+   flex-direction: column;
+   flex-wrap: wrap;
+   justify-content: center;
+   align-content: center;
+}
+
+#formBox{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    gap: 0.5rem;
+} 
+
+input{
+    border: 2px solid blue !important;
+    width: 20vw !important;
+    height: 2vw !important;
+    border-radius: 0.4rem;
+    padding-left: 0.5rem;
+}
+
+.errorMessage{
+    color: red;
+    text-align: center;
+}
+
+#loginBtn{
+    width: 20vw !important;
+    height: 2vw !important;
+    background-color: rgb(71, 121, 249);
+    color: white;
+    border-radius: 0.4rem;
+}
+
+#loginBtn:hover{
+    cursor: pointer;
+    box-shadow: 2px 2px 2px black;
+}
