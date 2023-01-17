@@ -6,7 +6,6 @@ const CreateAndSendToken = (user,statusCode,res)=>{
         httpOnly:true,
         secure: process.env.NODE_ENV === "production",
     }
-
     return res.status(statusCode).cookie('AUTH_TOKEN',token,options).json({
         success:true,
         message:token

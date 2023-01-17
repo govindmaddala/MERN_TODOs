@@ -26,11 +26,9 @@ const getUserByID = CatchAsyncErrors(async (req, res, next) => {
     }
 });
 
-
-
 const loginUser = CatchAsyncErrors(async(req,res,next)=>{
     const { email,password } = req.body;
-    const userFound = await User.findOne({ email });
+    const userFound = await User.findOne({ email }).select('+password');
     if(!userFound){
         return next(new ErrorHandle("User not found", 400));
     }
@@ -43,4 +41,21 @@ const loginUser = CatchAsyncErrors(async(req,res,next)=>{
     }
 });
 
-module.exports = { createUser,loginUser,getUserByID };
+const logoutUser = CatchAsyncErrors(async (req, res, next) => {
+    const { userID } = req.body;
+    const userFound = await User.findById(userID);
+    if (userFound) {
+        return res.status(200).cookie('AUTH_TOKEN', null, {
+            expires: new Date(Date.now()),
+            httpOnly: true
+        }).json({
+            success:true,
+            message:`${userFound.username} logged out successfully`
+        })
+
+    } else {
+        return next(new ErrorHandle("Internal error", 500));
+    }
+});
+
+module.exports = { createUser,loginUser,getUserByID,logoutUser };
