@@ -28,13 +28,19 @@ const App = () => {
             setUser(false);
             setIsLogged(false);
         }
-    }, [])
+    }, []);
+
+    const logoutFunction = () => {
+        setUser(false);
+        setIsLogged(false);
+        localStorage.removeItem("AUTH_TOKEN");
+    }
 
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<Index setUser={setUser} setIsLogged={setIsLogged} />} />
-                <Route path="/home" element={<Home isLogged={isLogged} user={user} setUser={setUser} setIsLogged={setIsLogged} />} />
+                <Route path="/home" element={<Home isLogged={isLogged} user={user} setUser={setUser} setIsLogged={setIsLogged} logoutFunction={logoutFunction} />} />
             </Routes>
         </Router>
     )
