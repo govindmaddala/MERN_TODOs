@@ -1,6 +1,7 @@
 const Task = require('../Database/TasksSchema');
 const CatchAsyncErrors = require('../utils/CatchAsyncErrors');
 const ErrorHandle = require('../utils/ErrorHandle');
+const User = require('../Database/UserSchema');
 
 const createNewTask = CatchAsyncErrors(async (req, res, next) => {
     const { userID, usersAllTasks } = req.body;
@@ -12,7 +13,7 @@ const createNewTask = CatchAsyncErrors(async (req, res, next) => {
             success: true,
             message: createdTask
         })
-    }else if (userTasksPresent.length !== 0) {
+    } else if (userTasksPresent.length !== 0) {
         const { _id, usersAllTasks } = userTasksPresent[0];
         var tasksToBeModified = usersAllTasks.filter((eachDatedTasks) => {
             const { taskDate, tasks } = eachDatedTasks;
@@ -40,67 +41,77 @@ const createNewTask = CatchAsyncErrors(async (req, res, next) => {
     }
 });
 
-const getTodayAllTasks = CatchAsyncErrors(async(req, res, next) => {
+const getTodayAllTasks = CatchAsyncErrors(async (req, res, next) => {
+    const { userID } = req.body;
+    var userPresent = await User.findById(userID);
+    console.log(userPresent);
+    if (userPresent) {
+        var userTasksPresent = await Task.find({ userID: userID });
+        if (userTasksPresent.length !== 0) {
+            let { usersAllTasks } = userTasksPresent[0];
+            var todayTasks = usersAllTasks.filter((eachDateTasks) => {
+                let { taskDate, tasks } = eachDateTasks;
+                if (taskDate === new Date().toLocaleDateString().toString()) {
+                    return tasks;
+                }
+            })
+            return res.status(200).json({
+                success: true,
+                message: todayTasks
+            })
+        } else {
+            return res.status(200).json({
+                success: true,
+                message: []
+            })
+        }
+    }else{
+        return next(new ErrorHandle("User not found",404));
+    }
+
+})
+
+const getAllTasksByDate = CatchAsyncErrors(async (req, res, next) => {
     const { userID } = req.body;
     var userTasksPresent = await Task.find({ userID: userID });
-    if(userTasksPresent.length !== 0){
-        let {usersAllTasks} = userTasksPresent[0];
-        var todayTasks = usersAllTasks.filter((eachDateTasks)=>{
-            let {taskDate,tasks} = eachDateTasks;
-            if(taskDate === new Date().toLocaleDateString().toString()){
+    if (userTasksPresent.length !== 0) {
+        let { usersAllTasks } = userTasksPresent[0];
+        var datedTasks = usersAllTasks.filter((eachDateTasks) => {
+            let { taskDate, tasks } = eachDateTasks;
+            if (taskDate === req.query.date) {
                 return tasks;
             }
         })
         return res.status(200).json({
-            success:true,
-            message:todayTasks
+            success: true,
+            message: datedTasks
         })
-    }else{
-        return next(new ErrorHandle("User not found",404));
+    } else {
+        return next(new ErrorHandle("User not found", 404));
     }
 })
 
-const getAllTasksByDate = CatchAsyncErrors( async (req, res, next) => {
+const updateTaskStatusByID = CatchAsyncErrors(async (req, res, next) => {
+    var taskID = req.params.id;
     const { userID } = req.body;
     var userTasksPresent = await Task.find({ userID: userID });
-    if(userTasksPresent.length !== 0){
-        let {usersAllTasks} = userTasksPresent[0];
-        var datedTasks = usersAllTasks.filter((eachDateTasks)=>{
-            let {taskDate,tasks} = eachDateTasks;
-            if(taskDate === req.query.date){
+    if (userTasksPresent.length !== 0) {
+        let { usersAllTasks } = userTasksPresent[0];
+        var datedTasks = usersAllTasks.map((eachDateTasks) => {
+            let { taskDate, tasks } = eachDateTasks;
+            let [{ _id, status, taskDetails, taskHeading }] = tasks;
+            if (taskDate === req.query.date) {
                 return tasks;
-            }
-        })
-        return res.status(200).json({
-            success:true,
-            message:datedTasks
-        })
-    }else{
-        return next(new ErrorHandle("User not found",404));
-    }
-})
-
-const updateTaskStatusByID =  CatchAsyncErrors(async (req, res, next) => {
-
-    const { userID,taskID } = req.body;
-    var userTasksPresent = await Task.find({ userID: userID });
-    if(userTasksPresent.length !== 0){
-        let {usersAllTasks} = userTasksPresent[0];
-        var datedTasks = usersAllTasks.map((eachDateTasks)=>{
-            let {taskDate,tasks} = eachDateTasks;
-            let [{_id,status,taskDetails,taskHeading}] = tasks;
-            if(taskDate === req.query.date){
-                return tasks;
-            }else{
+            } else {
                 return eachDateTasks;
             }
         })
         return res.status(200).json({
-            success:true,
-            message:datedTasks
+            success: true,
+            message: datedTasks
         })
-    }else{
-        return next(new ErrorHandle("User not found",404));
+    } else {
+        return next(new ErrorHandle("User not found", 404));
     }
 
     // const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, {
@@ -113,4 +124,4 @@ const updateTaskStatusByID =  CatchAsyncErrors(async (req, res, next) => {
     // });
 })
 
-module.exports = { createNewTask,getTodayAllTasks,getAllTasksByDate,updateTaskStatusByID}
+module.exports = { createNewTask, getTodayAllTasks, getAllTasksByDate, updateTaskStatusByID }
