@@ -1,0 +1,58 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#taskUpdateContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  gap: 1rem;
+  position: relative;
+}
+#taskHeading {
+  border: 2px solid black !important;
+  width: 50vw !important;
+}
+
+#taskDetails {
+  resize: none;
+  border: 2px solid black !important;
+  width: 50vw;
+  height: 20vh;
+  border-radius: 0.4rem;
+  padding-left: 0.5rem;
+  padding-top: 0.5rem;
+  /* padding-left: 0.5rem; */
+}
+
+#stylings {
+  border: 2px solid black !important;
+  width: 50vw;
+  border-radius: 0.4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-right: 2rem;
+  gap: 1rem;
+  position: absolute;
+  bottom: 2.3rem;
+  left: 24rem;
+}
+
+#boldButton,#italicButton{
+    cursor: pointer;
+}
+
+#tasks{
+  margin: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
