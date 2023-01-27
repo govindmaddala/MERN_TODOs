@@ -19,6 +19,7 @@ const getUserByID = CatchAsyncErrors(async (req, res, next) => {
     if (userFound) {
         return res.status(200).json({
             message:"Our user",
+            username:userFound.username,
             success:true
         })
     }else{
