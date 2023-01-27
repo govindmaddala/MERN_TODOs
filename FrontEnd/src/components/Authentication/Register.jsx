@@ -1,14 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import "./auth.css";
-import decodeToken from "jwt-decode";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-const Index = ({ setUser, setIsLogged }) => {
+// import jwtDecode from "jwt-decode";
+
+const Register = ({ setUser, setIsLogged }) => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
+    username: "",
     email: "",
     password: "",
   });
@@ -23,18 +22,19 @@ const Index = ({ setUser, setIsLogged }) => {
     });
   };
 
-  const getLogin = (e) => {
+  const getRegister = (e) => {
     e.preventDefault();
+    const newUserData = credentials;
     axios
-      .post("/user/login", credentials)
-      .then(async (resp) => {
+      .post("/user/register", newUserData)
+      .then((resp) => {
         if (resp.status === 200) {
-          const token = resp.data.message;
-          localStorage.setItem("AUTH_TOKEN", token);
-          var decoded = decodeToken(token);
-          setUser(decoded);
-          setIsLogged(true);
-          navigate("/home", { replace: "true" });
+          navigate("/");
+          setCredentials({
+            username: "",
+            email: "",
+            password: "",
+          });
         }
       })
       .catch((err) => {
@@ -45,8 +45,17 @@ const Index = ({ setUser, setIsLogged }) => {
     <div id="container">
       <div id="introductionBox"></div>
       <div id="loginBox">
-        <form action="" method="post" id="formBox" onSubmit={getLogin}>
-          <h2 style={{ textAlign: "center" }}>Login</h2>
+        <form action="" method="post" id="formBox" onSubmit={getRegister}>
+          <h2 style={{ textAlign: "center" }}>Register</h2>
+          <label htmlFor="username">Username*</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={credentials.username}
+            onChange={handleChange}
+          />
+          <p id="emailErrorMessage" className="errorMessage"></p>
           <label htmlFor="email">Email*</label>
           <input
             type="email"
@@ -65,11 +74,11 @@ const Index = ({ setUser, setIsLogged }) => {
             onChange={handleChange}
           />
           <p id="passwordErrorMessage" className="errorMessage"></p>
-          <button id="loginBtn">Login</button>
+          <button id="loginBtn">Register</button>
           <p>
-            Not our user ?
-            <Link to={"/register"} className="linkClass">
-              Register
+            Already our user?{" "}
+            <Link to={"/"} className="linkClass">
+              Login
             </Link>
           </p>
         </form>
@@ -78,4 +87,4 @@ const Index = ({ setUser, setIsLogged }) => {
   );
 };
 
-export default Index;
+export default Register;

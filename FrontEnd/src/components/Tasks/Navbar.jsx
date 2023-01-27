@@ -3,16 +3,19 @@ import { useRef } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import spiralLogo from '../../images/Spiral-notepad.png'
+// import jwtDecode from "jwt-decode";
 
-const Navbar = ({ dateBar, searchItem,logoutFunction}) => {
+const Navbar = ({ dateBar, searchItem,logoutFunction,getTasksByDateChange,username}) => {
+  // const navigate = useNavigate();
   const [time, setTime] = useState(new Date().toLocaleTimeString().toString());
   setInterval(() => {
     setTime(new Date().toLocaleTimeString().toString());
   }, 1000);
 
-  const handleChange = (node) => {
-    console.log(node.current.value);
-  };
+  // const handleChange = (node) => {
+  //   // console.log(node.current.value);
+  // };
 
   const profileNode = useRef();
 
@@ -23,9 +26,9 @@ const Navbar = ({ dateBar, searchItem,logoutFunction}) => {
   return (
     <div id="navbar">
       <div id="logo">
-        <h2>Logo</h2>
+        <img src={spiralLogo} alt="logo" />
       </div>
-      <div id="search">
+      {/* <div id="search">
         <input
           type="search"
           ref={searchItem}
@@ -36,9 +39,9 @@ const Navbar = ({ dateBar, searchItem,logoutFunction}) => {
             handleChange(searchItem);
           }}
         />
-      </div>
+      </div> */}
       <div id="time">
-        <h3 id="timeNow">{time}</h3>
+        <h2 id="timeNow">{time}</h2>
       </div>
       <div id="calender">
         <input
@@ -47,37 +50,38 @@ const Navbar = ({ dateBar, searchItem,logoutFunction}) => {
           ref={dateBar}
           id="datePicker"
           onChange={() => {
-            handleChange(dateBar);
+            getTasksByDateChange();
           }}
         />
       </div>
       <div id="options">
-        <Link to={"/home"}>Home</Link>
+        <Link to={"/home"} className="link">Home</Link>
 
-        <Link to={"#"}>
+        <Link to={"#"} className="link">
           <div className="dropdown">
             <Link
               to={"#"}
               type="button"
               onClick={dropDownOptionOnClick}
-              className="dropbtn"
+              className="dropbtn link"
+              id="profileName"
             >
-              Profile
+              {username}
             </Link>
             <div id="myDropdown" className="dropdown-content" ref={profileNode}>
-              <Link to="#" onClick={dropDownOptionOnClick}>
+              <Link to="#" onClick={dropDownOptionOnClick} className="link">
                 Settings
               </Link>
-              <Link to={"/favourite"} onClick={dropDownOptionOnClick}>
+              <Link to={"/favourite"} onClick={dropDownOptionOnClick} className="link">
                 Favourite
               </Link>
-              <Link to={"/charts"} onClick={dropDownOptionOnClick}>
+              <Link to={"/charts"} onClick={dropDownOptionOnClick} className="link">
                 Charts
               </Link>
-              <Link to="#" onClick={dropDownOptionOnClick}>
+              <Link to="#" onClick={dropDownOptionOnClick} className="link">
                 About
               </Link>
-              <Link to="/" onClick={()=>{
+              <Link className="link" to="/" onClick={()=>{
                 dropDownOptionOnClick();
                 logoutFunction();
               }}>

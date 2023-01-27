@@ -14,8 +14,10 @@
   gap: 1rem;
   position: relative;
 }
+
 #taskHeading {
   border: 2px solid black !important;
+  height: 40px !important;
   width: 50vw !important;
 }
 
@@ -23,11 +25,22 @@
   resize: none;
   border: 2px solid black !important;
   width: 50vw;
-  height: 20vh;
+  height: 150px;
   border-radius: 0.4rem;
   padding-left: 0.5rem;
   padding-top: 0.5rem;
-  /* padding-left: 0.5rem; */
+}
+
+#addTaskButton {
+  background-color: black;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  color: yellow;
+  position: absolute;
+  top: 160px;
+  right: 400px;
+  border: 2px solid yellow;
 }
 
 #stylings {
@@ -44,15 +57,93 @@
   left: 24rem;
 }
 
-#boldButton,#italicButton{
-    cursor: pointer;
+#boldButton,
+#italicButton {
+  cursor: pointer;
 }
 
-#tasks{
-  margin: 2rem;
-  text-align: center;
+#bottom {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+}
+
+#planningSection,
+#inprogressSection,
+#finishedSection {
+  width: 31vw;
+  margin: 1rem;
+  max-width: 100vw;
+  height: 57vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  border: 2px solid black;
+  overflow-y: auto;
+  position: relative;
+}
+
+.taskSectionHeading {
+  background-color: black;
+  color: white;
+  position: fixed;
+  width: calc(31vw - 0.2rem);
+  margin-bottom: 200px !important;
+  z-index: -20;
+}
+
+#planningTasks {
+  margin-top: 50px !important;
+}
+
+.eachTask {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  padding-right: 2rem;
+  padding-left: 1rem;
+  text-align: start;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background-color: rgb(251, 251, 153);
+}
+
+.deleteButton{
+  background-color: rgb(246, 77, 77);
+  color: white;
+  width: 60px;
+  height: 30px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.taskHeading {
+  color: black;
+  font-weight: bolder;
+  border-bottom: 1px solid black;
+}
+
+.taskHeading::first-letter {
+  font-size: 40px;
+  text-transform: capitalize;
+}
+
+.taskDetails {
+  font-weight: bolder;
+}
+
+.taskDetails::first-line {
+  text-indent: 20px !important;
+}
+
+.taskDetails::first-letter {
+  font-size: 20px;
+  text-transform: capitalize;
+}
+
+#noTaskMessage {
+  padding-top: 8rem;
+  font-size: 40px;
 }
