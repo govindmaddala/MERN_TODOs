@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 require('dotenv').config('../.env');
 
 const databaseConnect = () => {
-    mongoose.connect(process.env.MONGODB_LINK, (err) => {
+    mongoose.connect(process.env.MONGODB_LINK_CLOUD, (err) => {
         if (err) {
             console.log(err);
         } else {
