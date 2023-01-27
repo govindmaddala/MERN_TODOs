@@ -18,7 +18,8 @@ const taskSchema = new mongoose.Schema({
                         required: true
                     },
                     taskDetails: {
-                        type: String
+                        type: String,
+                        default:"No extra data"
                     },
                     status: {
                         type: String,
