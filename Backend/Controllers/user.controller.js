@@ -4,6 +4,7 @@ const { decryptData } = require("../utils/decryptData");
 const { encryptData } = require("../utils/encryptData");
 const bcrypt = require('bcrypt');
 const GenerateTokenAndOptions = require("../utils/generateTokenAndOptions");
+const connectDatabase = require("../Database/connectDatabase");
 
 exports.registerUser = CatchAsyncErrors(async (req, res, next) => {
     let username = decryptData(req.body.username);
@@ -13,6 +14,8 @@ exports.registerUser = CatchAsyncErrors(async (req, res, next) => {
     let query = {
         email
     }
+
+    let myDB = await connectDatabase();
     let userFound = await myDB.collection("users").find(query).toArray();
     if (userFound.length > 0) {
         return next(new ErrorHandle("User already existed", 400));
@@ -38,6 +41,7 @@ exports.registerUser = CatchAsyncErrors(async (req, res, next) => {
 })
 
 exports.checkUser = CatchAsyncErrors(async (req, res, next) => {
+    let myDB = await connectDatabase();
     let email = decryptData(req.body.email);
     let query = {
         email
@@ -53,12 +57,14 @@ exports.checkUser = CatchAsyncErrors(async (req, res, next) => {
 })
 
 exports.verifyLogin = CatchAsyncErrors(async (req, res, next) => {
+    let myDB = await connectDatabase();
     let email = decryptData(req.body.email);
     let password = decryptData(req.body.password);
 
     let query = {
         email
     }
+    
     let userFound = await myDB.collection("users").find(query).toArray();
     if (userFound.length === 0) {
         return next(new ErrorHandle("User not exists", 400));
@@ -80,6 +86,7 @@ exports.verifyLogin = CatchAsyncErrors(async (req, res, next) => {
 })
 
 exports.logoutUser = CatchAsyncErrors(async (req, res, next) => {
+    let myDB = await connectDatabase();
     let email = decryptData(req.body.email);
     let query = {
         email
@@ -138,6 +145,7 @@ exports.changePassword = CatchAsyncErrors(async (req, res, next) => {
 })
 
 exports.deleteUser = CatchAsyncErrors(async (req, res, next) => {
+    let myDB = await connectDatabase();
     let email = decryptData(req.body.email);
     let password = decryptData(req.body.password);
 

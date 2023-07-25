@@ -1,13 +1,15 @@
+const connectDatabase = require("../Database/connectDatabase");
 const CatchAsyncErrors = require("../utils/CatchAsyncErrors");
 const ErrorHandle = require("../utils/ErrorHandle");
 const { decryptData } = require("../utils/decryptData");
 const { encryptData } = require("../utils/encryptData");
-const moment = require('moment')
+const moment = require('moment');
 
 const ObjectId = require('mongodb').ObjectId
 
 
 exports.newTask = CatchAsyncErrors(async (req, res, next) => {
+    let myDB = await connectDatabase();
     let { email, task_heading, task_status, task_details, start_date, end_date } = req.body;
     email = decryptData(email);
     task_heading = decryptData(task_heading);
@@ -25,7 +27,7 @@ exports.newTask = CatchAsyncErrors(async (req, res, next) => {
         start_date,
         end_date
     }
-
+    
     let insertedResponse = await myDB.collection("tasks").insertOne(taskData);
     if (insertedResponse) {
         return res.status(200).send({
@@ -39,6 +41,7 @@ exports.newTask = CatchAsyncErrors(async (req, res, next) => {
 })
 
 exports.getUserTasks = CatchAsyncErrors(async (req, res, next) => {
+    let myDB = await connectDatabase();
     let { email } = req.body;
     email = decryptData(email);
 
@@ -54,6 +57,7 @@ exports.getUserTasks = CatchAsyncErrors(async (req, res, next) => {
 })
 
 exports.deleteTask = CatchAsyncErrors(async (req, res, next) => {
+    let myDB = await connectDatabase();
     let { _id } = req.body;
 
     let query = {
@@ -65,6 +69,3 @@ exports.deleteTask = CatchAsyncErrors(async (req, res, next) => {
         success: true
     })
 })
-
-
-// deleteTask
